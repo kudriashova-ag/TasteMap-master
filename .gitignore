@@ -1,0 +1,105 @@
+# ===================
+# .NET / ASP.NET Core
+# ===================
+
+## Build output
+bin/
+obj/
+out/
+publish/
+
+## User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vs/
+*.vscode/
+*.idea/
+
+## Package Manager / NuGet
+packages/
+*.nupkg
+*.snupkg
+*.nuget.props
+*.nuget.targets
+
+## Test results
+TestResults/
+*.coverage
+*.coveragexml
+*.trx
+
+## Logs and temp files
+*.log
+*.tmp
+*.temp
+*.cache
+*.pid
+
+## Dependency directories
+node_modules/
+bower_components/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===================
+# Environment & Secrets
+# ===================
+
+## User Secrets (local dev)
+secrets.json
+appsettings.Development.json
+appsettings.*.Development.json
+*.Local.json
+*.local.json
+.env
+.env.*
+!.env.example
+
+## Configuration with sensitive data (like connection strings)
+appsettings.*.Production.json   # если вы храните production-строки в коде — не делайте так, используйте переменные окружения
+!appsettings.json               # но сам шаблонный файл храним
+
+# ===================
+# Docker
+# ===================
+
+## Docker volumes (если вы их случайно создали внутри проекта)
+docker-compose.override.yml      # если вы используете переопределения, они могут содержать локальные секреты
+*.dockerignore
+*.containerignore
+
+## If you use Docker volumes mounted inside project folder (not recommended)
+/volumes/
+/postgres-data/
+
+# ===================
+# OS / Editors
+# ===================
+
+## Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+## macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+## Linux
+*~
+
+# ===================
+# Project-specific (optional)
+# ===================
+
+## Migration snapshots — обычно хранятся, но если вы генерируете их автоматически, можно оставить
+# Migrations/
+# !Migrations/.keep
+
+## Any local test scripts or temp files
+/test-scripts/
+/temp/

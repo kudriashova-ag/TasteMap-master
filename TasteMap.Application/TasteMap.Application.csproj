@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+		<PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.23.0" />
+		<!-- Пакет, в котором находится IConfiguration -->
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\TasteMap.Domain\TasteMap.Domain.csproj" />
+		<!-- Ссылка на слой инфраструктуры, чтобы Application видел AppDbContext -->
+		<!--<ProjectReference Include="..\TasteMap.Infrastructure\TasteMap.Infrastructure.csproj" /> -->
+	</ItemGroup>
+
+</Project>
