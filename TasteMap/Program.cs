@@ -11,21 +11,39 @@ using TasteMap.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Render передает порт через переменную PORT
+var port = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(port))
+{
+    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+}
+
 // --- 1. РЕГИСТРАЦИЯ СЕРВИСОВ И CORS ---
+
+var allowedOrigins = new List<string> { "http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000" };
+var frontendUrl = builder.Configuration["FrontendUrl"];
+if (!string.IsNullOrEmpty(frontendUrl))
+{
+    allowedOrigins.Add(frontendUrl.TrimEnd('/'));
+}
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000")
+        policy.WithOrigins(allowedOrigins.ToArray())
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
     });
 });
 
+// На Render строка подключения приходит в формате postgres://user:pass@host:port/db
+var connectionString = ToNpgsqlConnectionString(
+    Environment.GetEnvironmentVariable("DATABASE_URL") ?? builder.Configuration.GetConnectionString("DefaultConnection"));
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddScoped<IAppDbContext, AppDbContext>();
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
@@ -122,3 +140,19 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+static string? ToNpgsqlConnectionString(string? value)
+{
+    if (string.IsNullOrEmpty(value) || !(value.StartsWith("postgres://") || value.StartsWith("postgresql://")))
+    {
+        return value;
+    }
+
+    var uri = new Uri(value);
+    var userInfo = uri.UserInfo.Split(':', 2);
+    var dbPort = uri.Port > 0 ? uri.Port : 5432;
+
+    return $"Host={uri.Host};Port={dbPort};Database={uri.AbsolutePath.TrimStart('/')};" +
+           $"Username={Uri.UnescapeDataString(userInfo[0])};Password={Uri.UnescapeDataString(userInfo[1])};" +
+           "SSL Mode=Prefer";
+}

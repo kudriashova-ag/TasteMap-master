@@ -50,6 +50,7 @@ yarn-error.log*
 
 ## User Secrets (local dev)
 secrets.json
+_Resourse/
 appsettings.Development.json
 appsettings.*.Development.json
 *.Local.json
